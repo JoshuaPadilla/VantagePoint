@@ -1,0 +1,42 @@
+{
+    "model_name": "GradientBoostingClassifier (slow-learning, feature-engineered)",
+    "dataset_source": "Proxy Dataset (Kaggle)",
+    "metrics": {
+        "accuracy": 0.5075,
+        "f1_score": 0.4989,
+        "precision": 0.5729,
+        "recall": 0.5075
+    },
+    "confusion_matrix": [
+        [
+            23,
+            8,
+            0,
+            0
+        ],
+        [
+            2,
+            21,
+            10,
+            1
+        ],
+        [
+            2,
+            20,
+            19,
+            1
+        ],
+        [
+            2,
+            11,
+            9,
+            5
+        ]
+    ],
+    "class_labels": {
+        "3": "Excellent",
+        "2": "Vg",
+        "1": "Good",
+        "0": "Average"
+    }
+}
