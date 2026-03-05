@@ -132,7 +132,7 @@ function PredictPage() {
 		sessionStorage.setItem("arborFormData", JSON.stringify(form));
 
 		try {
-			const res = await fetch("/vantage/api/predict", {
+			const res = await fetch("/api/predict", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(form),

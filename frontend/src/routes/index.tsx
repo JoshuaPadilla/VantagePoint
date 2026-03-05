@@ -15,7 +15,7 @@ type EvalData = {
 
 export const Route = createFileRoute("/")({
 	loader: async (): Promise<EvalData> => {
-		const res = await fetch("/vantage/api/evaluation");
+		const res = await fetch("/api/evaluation");
 		if (!res.ok) throw new Error("Failed to fetch evaluation data");
 
 		return res.json();

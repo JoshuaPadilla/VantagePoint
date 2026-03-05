@@ -7,7 +7,7 @@
 	"scripts": {
 		"start": "node dist/app.js",
 		"build": "tsc",
-		"dev": "ts-node src/app.ts"
+		"dev": "TS_NODE_EXPERIMENTAL_RESOLVER=true node --loader ts-node/esm src/app.ts"
 	},
 	"keywords": [],
 	"author": "",
