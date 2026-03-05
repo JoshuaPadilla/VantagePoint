@@ -47,6 +47,7 @@ const occupations = [
 function SelectField({
 	id,
 	label,
+	hint,
 	icon,
 	value,
 	onChange,
@@ -55,6 +56,7 @@ function SelectField({
 }: {
 	id: keyof FormState;
 	label: string;
+	hint?: string;
 	icon: string;
 	value: string;
 	onChange: (val: string) => void;
@@ -63,12 +65,19 @@ function SelectField({
 }) {
 	return (
 		<div className="space-y-2">
-			<label
-				htmlFor={id}
-				className="block text-sm font-semibold text-slate-700 dark:text-slate-300"
-			>
-				{label}
-			</label>
+			<div>
+				<label
+					htmlFor={id}
+					className="block text-sm font-semibold text-slate-700 dark:text-slate-300"
+				>
+					{label}
+				</label>
+				{hint && (
+					<p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5 m-0">
+						{hint}
+					</p>
+				)}
+			</div>
 			<div className="relative">
 				<select
 					id={id}
@@ -220,6 +229,7 @@ function PredictPage() {
 									<SelectField
 										id="Gender"
 										label="Gender"
+										hint="Student sex as a demographic predictor variable."
 										icon="wc"
 										value={form.Gender}
 										onChange={set("Gender")}
@@ -234,6 +244,7 @@ function PredictPage() {
 									<SelectField
 										id="Caste"
 										label="Caste / Category"
+										hint="Mapped to socioeconomic background category — a proxy for educational access level and social classification."
 										icon="group"
 										value={form.Caste}
 										onChange={set("Caste")}
@@ -260,6 +271,7 @@ function PredictPage() {
 									<SelectField
 										id="Class_ten_education"
 										label="Class X Education Board"
+										hint="Mapped to Junior High School institution type (e.g. public, private, science high school)."
 										icon="library_books"
 										value={form.Class_ten_education}
 										onChange={set("Class_ten_education")}
@@ -275,6 +287,7 @@ function PredictPage() {
 									<SelectField
 										id="twelve_education"
 										label="Class XII Education Board"
+										hint="Mapped to Senior High School academic track or institution type (e.g. STEM, ABM, HUMSS, TVL, GAS)."
 										icon="library_books"
 										value={form.twelve_education}
 										onChange={set("twelve_education")}
@@ -290,6 +303,7 @@ function PredictPage() {
 									<SelectField
 										id="medium"
 										label="Medium of Instruction"
+										hint="Primary language used during previous schooling. May influence comprehension in the entrance exam."
 										icon="translate"
 										value={form.medium}
 										onChange={set("medium")}
@@ -311,6 +325,7 @@ function PredictPage() {
 									<SelectField
 										id="Class_X_Percentage"
 										label="Class X Percentage Grade"
+										hint="Mapped to Junior High School general average."
 										icon="grade"
 										value={form.Class_X_Percentage}
 										onChange={set("Class_X_Percentage")}
@@ -336,6 +351,7 @@ function PredictPage() {
 									<SelectField
 										id="Class_XII_Percentage"
 										label="Class XII Percentage Grade"
+										hint="Mapped to Senior High School general average."
 										icon="grade"
 										value={form.Class_XII_Percentage}
 										onChange={set("Class_XII_Percentage")}
@@ -371,6 +387,7 @@ function PredictPage() {
 									<SelectField
 										id="Father_occupation"
 										label="Father's Occupation"
+										hint="Father’s employment category — a socioeconomic indicator of access to educational resources."
 										icon="engineering"
 										value={form.Father_occupation}
 										onChange={set("Father_occupation")}
@@ -386,6 +403,7 @@ function PredictPage() {
 									<SelectField
 										id="Mother_occupation"
 										label="Mother's Occupation"
+										hint="Mother’s employment category — complements father’s occupation as an additional socioeconomic predictor."
 										icon="engineering"
 										value={form.Mother_occupation}
 										onChange={set("Mother_occupation")}
@@ -414,6 +432,7 @@ function PredictPage() {
 									<SelectField
 										id="coaching"
 										label="Coaching Support"
+										hint="Mapped to entrance exam review participation — whether the student attended a formal review program."
 										icon="hub"
 										value={form.coaching}
 										onChange={set("coaching")}
@@ -432,6 +451,7 @@ function PredictPage() {
 									<SelectField
 										id="time"
 										label="Weekly Study Hours (approx.)"
+										hint="Mapped to preparation time allocation — reflects study intensity prior to the entrance examination."
 										icon="schedule"
 										value={form.time}
 										onChange={set("time")}

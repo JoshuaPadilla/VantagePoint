@@ -8,27 +8,80 @@ const features = [
 	{
 		group: "Demographic Information",
 		icon: "person",
-		items: ["Gender", "Caste", "Medium of instruction"],
+		items: [
+			{ label: "Gender", values: ["male", "female"] },
+			{ label: "Caste", values: ["General", "OBC", "SC", "ST"] },
+			{
+				label: "Medium of instruction",
+				values: ["ENGLISH", "ASSAMESE", "OTHERS"],
+			},
+		],
 	},
 	{
 		group: "Academic Background",
 		icon: "school",
 		items: [
-			"Class Ten Education Board",
-			"Class Twelve Education Board",
-			"Class X Percentage (Excellent, Vg, Good, Average)",
-			"Class XII Percentage (Excellent, Vg, Good, Average)",
+			{
+				label: "Class Ten Education Board",
+				values: ["SEBA", "CBSE", "OTHERS"],
+			},
+			{
+				label: "Class Twelve Education Board",
+				values: ["AHSEC", "CBSE", "OTHERS"],
+			},
+			{
+				label: "Class X Percentage",
+				values: ["Excellent", "Vg", "Good", "Average"],
+			},
+			{
+				label: "Class XII Percentage",
+				values: ["Excellent", "Vg", "Good", "Average"],
+			},
 		],
 	},
 	{
 		group: "Socio-Economic Factors",
 		icon: "family_restroom",
-		items: ["Father's Occupation", "Mother's Occupation"],
+		items: [
+			{
+				label: "Father's Occupation",
+				values: [
+					"DOCTOR",
+					"SCHOOL_TEACHER",
+					"COLLEGE_TEACHER",
+					"BUSINESS",
+					"BANK_OFFICIAL",
+					"ENGINEER",
+					"CULTIVATOR",
+					"OTHERS",
+				],
+			},
+			{
+				label: "Mother's Occupation",
+				values: [
+					"HOUSE_WIFE",
+					"DOCTOR",
+					"SCHOOL_TEACHER",
+					"COLLEGE_TEACHER",
+					"BUSINESS",
+					"BANK_OFFICIAL",
+					"ENGINEER",
+					"CULTIVATOR",
+					"OTHERS",
+				],
+			},
+		],
 	},
 	{
 		group: "Preparation Factor",
 		icon: "timer",
-		items: ["Coaching type", "Daily study time"],
+		items: [
+			{ label: "Coaching type", values: ["NO", "WA", "OA"] },
+			{
+				label: "Daily study time (hours)",
+				values: ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN"],
+			},
+		],
 	},
 ];
 
@@ -38,6 +91,16 @@ const rfReasons = [
 	"Performs well in multi-class classification problems",
 	"Feature engineering (academic sum & product) boosts signal capture",
 ];
+
+const confusionMatrix = {
+	labels: ["Average", "Good", "Vg", "Excellent"],
+	rows: [
+		{ actual: "Average", values: [23, 8, 0, 0] },
+		{ actual: "Good", values: [2, 21, 10, 1] },
+		{ actual: "Vg", values: [2, 20, 19, 1] },
+		{ actual: "Excellent", values: [2, 11, 9, 5] },
+	],
+};
 
 const objectives = [
 	"To collect and prepare a structured dataset related to student entrance exam performance",
@@ -58,16 +121,6 @@ const contributions = [
 	"Identify patterns in academic and socio-economic factors",
 	"Support early academic performance analysis",
 ];
-
-const confusionMatrix = {
-	labels: ["Average", "Good", "Vg", "Excellent"],
-	rows: [
-		{ actual: "Average", values: [23, 8, 0, 0] },
-		{ actual: "Good", values: [2, 21, 10, 1] },
-		{ actual: "Vg", values: [2, 20, 19, 1] },
-		{ actual: "Excellent", values: [2, 11, 9, 5] },
-	],
-};
 
 const metrics = [
 	{ label: "Accuracy", value: "0.5075" },
@@ -210,16 +263,28 @@ function About() {
 									{f.group}
 								</h3>
 							</div>
-							<ul className="space-y-1.5 list-none m-0 p-0">
+							<ul className="space-y-3 list-none m-0 p-0">
 								{f.items.map((item) => (
 									<li
-										key={item}
-										className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400"
+										key={item.label}
+										className="space-y-1.5"
 									>
-										<span className="material-symbols-outlined text-primary text-sm shrink-0 mt-0.5">
-											arrow_right
-										</span>
-										{item}
+										<div className="flex items-start gap-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+											<span className="material-symbols-outlined text-primary text-sm shrink-0 mt-0.5">
+												arrow_right
+											</span>
+											{item.label}
+										</div>
+										<div className="flex flex-wrap gap-1 pl-5">
+											{item.values.map((v) => (
+												<span
+													key={v}
+													className="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-mono"
+												>
+													{v}
+												</span>
+											))}
+										</div>
 									</li>
 								))}
 							</ul>
@@ -249,7 +314,7 @@ function About() {
 									trending_up
 								</span>
 								<span className="text-xl font-bold text-slate-900 dark:text-white">
-									Gradient Boosting Classifier
+									Random Forest Classifier
 								</span>
 							</div>
 							<p className="text-sm text-slate-500 dark:text-slate-400 m-0 font-semibold">

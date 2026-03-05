@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { predictionDto } from "../dto.ts/prediction.dto.js";
 
 const ML_SERVICE_URL =
-	process.env.ML_SERVICE_URL ?? "http://localhost:5000/predict";
+	process.env.ML_SERVICE_URL ?? "http://localhost:8000/predict";
 
 export const predict = async (req: Request, res: Response): Promise<void> => {
 	// 1. Validate incoming request body against the DTO schema
