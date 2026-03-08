@@ -15,10 +15,10 @@ const config = defineConfig({
 	],
 	server: {
 		proxy: {
-			"/api": {
-				target: "http://localhost:3006",
+			"/vantage-api": {
+				target: "http://localhost:3006/",
 				changeOrigin: true,
-				rewrite: (path) => path.replace(/^\/api/, ""),
+				rewrite: (path) => path.replace(/^\/vantage-api/, ""),
 			},
 		},
 	},

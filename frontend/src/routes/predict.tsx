@@ -141,7 +141,7 @@ function PredictPage() {
 		sessionStorage.setItem("arborFormData", JSON.stringify(form));
 
 		try {
-			const res = await fetch("/api/predict", {
+			const res = await fetch("/vantage-api/predict", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(form),
@@ -185,10 +185,10 @@ function PredictPage() {
 	}, []);
 
 	return (
-		<main className="flex-1 flex flex-col items-center justify-center py-12 px-4 rise-in">
+		<main className="flex-1 flex flex-col items-center justify-center px-4 py-8 sm:py-12 rise-in">
 			<div className="w-full max-w-2xl">
 				{/* Page intro */}
-				<div className="mb-8 text-center">
+				<div className="mb-6 text-center sm:mb-8">
 					<div className="inline-flex items-center gap-2 rounded-full bg-blue-50 dark:bg-blue-900/20 px-4 py-1.5 border border-blue-100 dark:border-blue-800 mb-4">
 						<span className="material-symbols-outlined text-primary text-sm">
 							psychology
@@ -197,7 +197,7 @@ function PredictPage() {
 							Random Forest Classifier
 						</span>
 					</div>
-					<h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-2 mt-0">
+					<h1 className="mb-2 mt-0 text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl md:text-4xl">
 						Student Performance Prediction
 					</h1>
 					<p className="text-slate-500 dark:text-slate-400 text-sm md:text-base">
@@ -208,7 +208,7 @@ function PredictPage() {
 
 				{/* Form card */}
 				<div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-slate-950/50 border border-slate-200 dark:border-slate-800 overflow-hidden">
-					<div className="px-8 py-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
+					<div className="border-b border-slate-100 bg-slate-50/50 px-5 py-4 dark:border-slate-800 dark:bg-slate-800/20 sm:px-8 sm:py-5">
 						<h3 className="font-bold text-slate-800 dark:text-slate-200 text-lg flex items-center gap-2 m-0">
 							<span className="material-symbols-outlined text-primary">
 								edit_note
@@ -217,8 +217,11 @@ function PredictPage() {
 						</h3>
 					</div>
 
-					<div className="p-8">
-						<form onSubmit={handleSubmit} className="space-y-7">
+					<div className="p-5 sm:p-8">
+						<form
+							onSubmit={handleSubmit}
+							className="space-y-6 sm:space-y-7"
+						>
 							{/* Personal Details */}
 							<div className="space-y-4">
 								<SectionHeading
@@ -516,7 +519,7 @@ function PredictPage() {
 					</div>
 
 					{/* Footer note */}
-					<div className="px-8 py-4 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-100 dark:border-slate-800 flex items-start gap-3">
+					<div className="flex items-start gap-3 border-t border-slate-100 bg-slate-50 px-5 py-4 dark:border-slate-800 dark:bg-slate-800/40 sm:px-8">
 						<span className="material-symbols-outlined text-slate-400 text-sm mt-0.5">
 							info
 						</span>

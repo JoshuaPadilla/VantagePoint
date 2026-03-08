@@ -68,8 +68,14 @@ a:hover {
 
 /* ── Shared page wrapper ──────────────────────── */
 .page-wrap {
-	width: min(1280px, calc(100% - 2rem));
+	width: min(1280px, calc(100% - 1.5rem));
 	margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+	.page-wrap {
+		width: min(1280px, calc(100% - 2rem));
+	}
 }
 
 /* ── Metric progress bar util ─────────────────── */

@@ -15,7 +15,7 @@ type EvalData = {
 
 export const Route = createFileRoute("/")({
 	loader: async (): Promise<EvalData> => {
-		const res = await fetch("/api/evaluation");
+		const res = await fetch("vantage-api/evaluation");
 		if (!res.ok) throw new Error("Failed to fetch evaluation data");
 
 		return res.json();
@@ -186,12 +186,12 @@ function EvaluationPage() {
 	];
 
 	return (
-		<main className="py-8 px-4">
+		<main className="px-4 py-6 sm:py-8">
 			<div className="page-wrap">
 				{/* Page header */}
-				<div className="flex flex-col md:flex-row md:items-center mb-8 gap-4 rise-in justify-center">
+				<div className="mb-6 flex flex-col justify-center gap-3 rise-in sm:mb-8 md:flex-row md:items-center md:gap-4">
 					<div>
-						<h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 m-0">
+						<h1 className="m-0 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-white sm:text-2xl">
 							<span className="material-symbols-outlined text-primary">
 								model_training
 							</span>
@@ -217,11 +217,11 @@ function EvaluationPage() {
 
 				{/* Confusion matrix */}
 				<div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm mb-8 rise-in">
-					<div className="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+					<div className="flex flex-col gap-3 border-b border-slate-100 p-4 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between sm:p-5">
 						<h3 className="font-bold text-slate-900 dark:text-white text-lg m-0">
 							Confusion Matrix
 						</h3>
-						<div className="flex items-center gap-3 text-xs text-slate-500">
+						<div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
 							<span className="flex items-center gap-1">
 								<span className="w-3 h-3 rounded-sm bg-blue-100 inline-block" />{" "}
 								Low
@@ -232,7 +232,7 @@ function EvaluationPage() {
 							</span>
 						</div>
 					</div>
-					<div className="p-6 md:p-8">
+					<div className="p-4 sm:p-6 md:p-8">
 						<ConfusionMatrix
 							matrix={data.confusion_matrix}
 							labels={orderedLabels}
@@ -242,7 +242,7 @@ function EvaluationPage() {
 
 				{/* Classification summary table */}
 				<div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm rise-in">
-					<div className="p-5 border-b border-slate-100 dark:border-slate-800">
+					<div className="border-b border-slate-100 p-4 dark:border-slate-800 sm:p-5">
 						<h3 className="font-bold text-slate-900 dark:text-white text-lg m-0">
 							Per-Class Performance
 						</h3>
@@ -251,12 +251,16 @@ function EvaluationPage() {
 						<table className="w-full text-left text-sm text-slate-600 dark:text-slate-400">
 							<thead className="bg-slate-50 dark:bg-slate-800/50 text-xs uppercase font-bold text-slate-500 dark:text-slate-300">
 								<tr>
-									<th className="px-6 py-4">Class</th>
-									<th className="px-6 py-4">
+									<th className="px-3 py-3 sm:px-6 sm:py-4">
+										Class
+									</th>
+									<th className="px-3 py-3 sm:px-6 sm:py-4">
 										True Positives (diagonal)
 									</th>
-									<th className="px-6 py-4">Total Actual</th>
-									<th className="px-6 py-4">
+									<th className="px-3 py-3 sm:px-6 sm:py-4">
+										Total Actual
+									</th>
+									<th className="px-3 py-3 sm:px-6 sm:py-4">
 										Class Accuracy
 									</th>
 								</tr>
@@ -279,23 +283,27 @@ function EvaluationPage() {
 											key={label}
 											className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
 										>
-											<td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">
+											<td className="px-3 py-3 font-semibold text-slate-900 dark:text-white sm:px-6 sm:py-4">
 												<span className="inline-block w-2.5 h-2.5 rounded-full bg-primary mr-2" />
 												{label}
 											</td>
-											<td className="px-6 py-4">{tp}</td>
-											<td className="px-6 py-4">
+											<td className="px-3 py-3 sm:px-6 sm:py-4">
+												{tp}
+											</td>
+											<td className="px-3 py-3 sm:px-6 sm:py-4">
 												{total}
 											</td>
-											<td className="px-6 py-4">
+											<td className="px-3 py-3 sm:px-6 sm:py-4">
 												{acc}%
 											</td>
 										</tr>
 									);
 								})}
 								<tr className="bg-slate-50/50 dark:bg-slate-800/20 font-bold text-slate-900 dark:text-white">
-									<td className="px-6 py-4">Overall</td>
-									<td className="px-6 py-4">
+									<td className="px-3 py-3 sm:px-6 sm:py-4">
+										Overall
+									</td>
+									<td className="px-3 py-3 sm:px-6 sm:py-4">
 										{data.confusion_matrix.reduce(
 											(
 												sum: number,
@@ -305,7 +313,7 @@ function EvaluationPage() {
 											0,
 										)}
 									</td>
-									<td className="px-6 py-4">
+									<td className="px-3 py-3 sm:px-6 sm:py-4">
 										{data.confusion_matrix
 											.flat()
 											.reduce(
@@ -313,7 +321,7 @@ function EvaluationPage() {
 												0,
 											)}
 									</td>
-									<td className="px-6 py-4">
+									<td className="px-3 py-3 sm:px-6 sm:py-4">
 										{(data.metrics.accuracy * 100).toFixed(
 											1,
 										)}

@@ -154,13 +154,13 @@ function ResultPage() {
 	const tips = recommendations[label] ?? recommendations["Average"];
 
 	return (
-		<main className="flex-1 py-10 px-4 rise-in">
+		<main className="flex-1 px-4 py-6 sm:py-10 rise-in">
 			<div className="page-wrap">
 				{/* Breadcrumb */}
-				<div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm mb-6">
+				<div className="mb-5 flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400 sm:mb-6">
 					<button
 						onClick={() => navigate({ to: "/predict" })}
-						className="hover:text-primary flex items-center gap-1 bg-transparent border-0 cursor-pointer p-0 text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm transition-colors"
+						className="flex items-center gap-1 bg-transparent border-0 cursor-pointer p-0 text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm transition-colors"
 					>
 						<span className="material-symbols-outlined text-lg">
 							arrow_back
@@ -173,13 +173,13 @@ function ResultPage() {
 					</span>
 				</div>
 
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+				<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
 					{/* Main result panel */}
 					<div className="lg:col-span-2 flex flex-col gap-6">
 						{/* Primary outcome card */}
-						<div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm relative overflow-hidden">
+						<div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
 							<div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary to-blue-400" />
-							<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8">
+							<div className="mb-6 flex flex-col items-start justify-between gap-4 sm:mb-8 sm:flex-row sm:items-center sm:gap-6">
 								<div>
 									<h3 className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider mb-2">
 										Prediction Outcome
@@ -210,7 +210,7 @@ function ResultPage() {
 								</div>
 							</div>
 
-							<div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+							<div className="flex flex-col items-center gap-6 md:flex-row md:items-start md:gap-8">
 								{/* Gauge */}
 								<GaugeCircle confidence={confidence} />
 
@@ -271,7 +271,7 @@ function ResultPage() {
 							</div>
 
 							{/* Action buttons */}
-							<div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 flex gap-4">
+							<div className="mt-8 flex flex-col gap-3 border-t border-slate-100 pt-6 dark:border-slate-800 sm:flex-row sm:gap-4">
 								<Link
 									to="/predict"
 									className="flex-1 bg-white hover:bg-slate-50 text-slate-700 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 font-bold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2 no-underline"
@@ -319,7 +319,7 @@ function ResultPage() {
 
 					{/* Sidebar: input parameters */}
 					<div className="lg:col-span-1">
-						<div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sticky top-24">
+						<div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50 sm:p-6 lg:sticky lg:top-24">
 							<h3 className="font-bold text-slate-900 dark:text-white text-base mb-4 pb-4 border-b border-slate-200 dark:border-slate-700 m-0">
 								Input Parameters
 							</h3>
@@ -360,12 +360,12 @@ function ResultPage() {
 											{fields.map((f) => (
 												<div
 													key={f}
-													className="flex justify-between items-center mb-1.5"
+													className="mb-1.5 flex items-start justify-between gap-3"
 												>
-													<span className="text-slate-600 dark:text-slate-400 capitalize">
+													<span className="min-w-0 text-slate-600 dark:text-slate-400 capitalize">
 														{f.replace(/_/g, " ")}
 													</span>
-													<span className="font-semibold text-slate-900 dark:text-white text-right ml-2">
+													<span className="ml-2 text-right font-semibold text-slate-900 dark:text-white break-words">
 														{storedForm[f] || "—"}
 													</span>
 												</div>

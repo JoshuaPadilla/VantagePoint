@@ -131,7 +131,7 @@ const metrics = [
 
 function About() {
 	return (
-		<main className="flex-1 w-full max-w-[1200px] mx-auto px-4 md:px-10 py-12 rise-in">
+		<main className="page-wrap flex-1 px-4 py-8 sm:py-12 rise-in">
 			{/* Hero */}
 			<section className="mb-14 text-center max-w-3xl mx-auto">
 				<div className="inline-flex items-center gap-2 rounded-full bg-blue-50 dark:bg-blue-900/20 px-4 py-1.5 border border-blue-100 dark:border-blue-800 mb-6">
@@ -142,7 +142,7 @@ function About() {
 						Thesis Documentation
 					</span>
 				</div>
-				<h1 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4 mt-0 leading-tight">
+				<h1 className="mb-4 mt-0 text-2xl font-black leading-tight text-slate-900 dark:text-white sm:text-3xl md:text-4xl">
 					Prediction of Student Performance in the Entrance
 					Examination using Classification Technique
 				</h1>
@@ -187,7 +187,7 @@ function About() {
 			{/* Data Source */}
 			<section className="mb-14">
 				<div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-					<div className="px-8 py-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 flex items-center gap-3">
+					<div className="flex items-center gap-3 border-b border-slate-100 bg-slate-50/50 px-5 py-4 dark:border-slate-800 dark:bg-slate-800/20 sm:px-8 sm:py-5">
 						<span className="material-symbols-outlined text-primary">
 							dataset
 						</span>
@@ -195,7 +195,7 @@ function About() {
 							Data Source
 						</h2>
 					</div>
-					<div className="p-8 flex flex-col md:flex-row gap-8 items-start">
+					<div className="flex flex-col items-start gap-6 p-5 sm:p-8 md:flex-row md:gap-8">
 						<div className="flex-1 space-y-3">
 							<p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed m-0">
 								Due to data access limitations, the study uses a
@@ -296,7 +296,7 @@ function About() {
 			{/* Methodology */}
 			<section className="mb-14">
 				<div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-					<div className="px-8 py-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 flex items-center gap-3">
+					<div className="flex items-center gap-3 border-b border-slate-100 bg-slate-50/50 px-5 py-4 dark:border-slate-800 dark:bg-slate-800/20 sm:px-8 sm:py-5">
 						<span className="material-symbols-outlined text-primary">
 							account_tree
 						</span>
@@ -304,7 +304,7 @@ function About() {
 							Core Methodology
 						</h2>
 					</div>
-					<div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+					<div className="grid grid-cols-1 gap-6 p-5 sm:p-8 md:grid-cols-2 md:gap-8">
 						<div className="space-y-4">
 							<h3 className="text-sm font-bold text-primary uppercase tracking-wider m-0">
 								Model Used
@@ -411,7 +411,7 @@ function About() {
 					))}
 				</div>
 				<div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-					<div className="px-8 py-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 flex items-center gap-3">
+					<div className="flex items-center gap-3 border-b border-slate-100 bg-slate-50/50 px-5 py-4 dark:border-slate-800 dark:bg-slate-800/20 sm:px-8 sm:py-5">
 						<span className="material-symbols-outlined text-primary">
 							grid_on
 						</span>
@@ -419,17 +419,17 @@ function About() {
 							Confusion Matrix
 						</h3>
 					</div>
-					<div className="p-6 overflow-x-auto">
+					<div className="overflow-x-auto p-4 sm:p-6">
 						<table className="w-full text-sm text-center">
 							<thead>
 								<tr>
-									<th className="px-4 py-2 text-left text-xs text-slate-500 font-semibold uppercase">
+									<th className="px-3 py-2 text-left text-xs text-slate-500 font-semibold uppercase sm:px-4">
 										Actual \ Predicted
 									</th>
 									{confusionMatrix.labels.map((l) => (
 										<th
 											key={l}
-											className="px-4 py-2 text-xs text-slate-500 font-semibold uppercase"
+											className="px-3 py-2 text-xs text-slate-500 font-semibold uppercase sm:px-4"
 										>
 											{l}
 										</th>
@@ -442,13 +442,13 @@ function About() {
 										key={row.actual}
 										className="border-t border-slate-100 dark:border-slate-800"
 									>
-										<td className="px-4 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase">
+										<td className="px-3 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase sm:px-4">
 											{row.actual}
 										</td>
 										{row.values.map((v, ci) => (
 											<td
 												key={ci}
-												className={`px-4 py-3 font-bold ${
+												className={`px-3 py-3 font-bold sm:px-4 ${
 													ri === ci
 														? "text-primary bg-blue-50 dark:bg-blue-900/20"
 														: "text-slate-600 dark:text-slate-400"

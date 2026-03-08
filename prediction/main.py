@@ -50,6 +50,7 @@ class StudentData(BaseModel):
 
 @app.post("/predict")
 def predict_performance(data: StudentData):
+    print("Received data:", data.dict())  # Debugging line to check incoming data
     df = pd.DataFrame([data.dict()])
 
     # 1. Apply ordinal mappings (same as training notebook)
