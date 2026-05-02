@@ -1,5 +1,8 @@
 import type { Request, Response } from "express";
-import { predictionDto } from "../dto.ts/prediction.dto.js";
+import {
+	predictionDto,
+	predictionResultDto,
+} from "../dto.ts/prediction.dto.js";
 
 const ML_SERVICE_URL =
 	process.env.ML_SERVICE_URL ?? "http://localhost:8006/predict";
@@ -37,7 +40,17 @@ export const predict = async (req: Request, res: Response): Promise<void> => {
 
 		// 3. Return the prediction result to the client
 		const prediction = await mlResponse.json();
-		res.status(200).json({ prediction });
+		const parsedPrediction = predictionResultDto.safeParse(prediction);
+
+		if (!parsedPrediction.success) {
+			res.status(502).json({
+				message: "ML service returned an unexpected response",
+				details: parsedPrediction.error.issues,
+			});
+			return;
+		}
+
+		res.status(200).json({ prediction: parsedPrediction.data });
 	} catch (error) {
 		const message =
 			error instanceof Error ? error.message : "Unknown error";

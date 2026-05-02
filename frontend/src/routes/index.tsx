@@ -3,11 +3,13 @@ import { createFileRoute } from "@tanstack/react-router";
 type EvalData = {
 	model_name: string;
 	dataset_source: string;
+	task_type?: string;
+	target_mapping?: Record<string, number>;
 	metrics: {
 		accuracy: number;
-		f1_score: number;
-		precision: number;
-		recall: number;
+		f1_score?: number;
+		precision?: number;
+		recall?: number;
 	};
 	confusion_matrix: number[][];
 	class_labels: Record<string, string>;
@@ -15,7 +17,7 @@ type EvalData = {
 
 export const Route = createFileRoute("/")({
 	loader: async (): Promise<EvalData> => {
-		const res = await fetch("vantage-api/evaluation");
+		const res = await fetch("/vantage-api/evaluation");
 		if (!res.ok) throw new Error("Failed to fetch evaluation data");
 
 		return res.json();
@@ -27,18 +29,25 @@ function MetricCard({
 	icon,
 	label,
 	value,
-	color,
+	iconClass,
+	barClass,
+	caption,
+	progress,
 }: {
 	icon: string;
 	label: string;
-	value: number;
-	color: string;
+	value: string;
+	iconClass: string;
+	barClass?: string;
+	caption?: string;
+	progress?: number;
 }) {
-	const pct = (value * 100).toFixed(1);
+	const normalizedProgress =
+		progress == null ? undefined : Math.max(0, Math.min(100, progress));
 	return (
 		<div className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group rise-in">
 			<div
-				className={`absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-${color}-600`}
+				className={`absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity ${iconClass}`}
 			>
 				<span className={`material-symbols-outlined text-6xl`}>
 					{icon}
@@ -49,15 +58,22 @@ function MetricCard({
 			</span>
 			<div className="mt-1 flex items-baseline gap-2">
 				<span className="text-4xl font-black text-slate-900 dark:text-white">
-					{pct}%
+					{value}
 				</span>
 			</div>
-			<div className="metric-bar mt-4 rounded-full">
-				<div
-					className={`bg-${color}-600 h-full rounded-full transition-all duration-700`}
-					style={{ width: `${pct}%` }}
-				/>
-			</div>
+			{caption && (
+				<p className="mt-2 text-sm text-slate-500 dark:text-slate-400 m-0">
+					{caption}
+				</p>
+			)}
+			{normalizedProgress != null && barClass && (
+				<div className="metric-bar mt-4 rounded-full">
+					<div
+						className={`${barClass} h-full rounded-full transition-all duration-700`}
+						style={{ width: `${normalizedProgress}%` }}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }
@@ -87,7 +103,7 @@ function ConfusionMatrix({
 
 	return (
 		<div className="overflow-x-auto">
-			<div className="relative min-w-[340px]">
+			<div className="relative min-w-85">
 				{/* Axis labels */}
 				<div className="absolute -left-6 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] font-bold text-slate-400 uppercase tracking-wider hidden md:block">
 					Actual
@@ -127,7 +143,7 @@ function ConfusionMatrix({
 						{row.map((val, cIdx) => (
 							<div
 								key={cIdx}
-								className={`rounded-md flex flex-col items-center justify-center p-2 min-h-[56px] cursor-default transition-transform hover:scale-105 ${textColor(val, rIdx, cIdx)}`}
+								className={`rounded-md flex flex-col items-center justify-center p-2 min-h-14 cursor-default transition-transform hover:scale-105 ${textColor(val, rIdx, cIdx)}`}
 								style={{
 									background: cellColor(val, rIdx, cIdx),
 								}}
@@ -151,37 +167,64 @@ function ConfusionMatrix({
 
 function EvaluationPage() {
 	const data = Route.useLoaderData();
-	console.log(data);
 
-	// Build ordered labels from class_labels (0→Average,1→Good,2→Vg,3→Excellent)
+	// Build ordered labels from class_labels in numeric key order.
 	const orderedLabels = Object.keys(data.class_labels)
 		.sort((a, b) => Number(a) - Number(b))
 		.map((k) => data.class_labels[k]);
+	const totalSamples = data.confusion_matrix
+		.flat()
+		.reduce((sum, value) => sum + value, 0);
+	const correctPredictions = data.confusion_matrix.reduce(
+		(sum, row, index) => sum + (row[index] ?? 0),
+		0,
+	);
+	const higherBandLabel =
+		orderedLabels[1] ?? orderedLabels[0] ?? "Higher band";
+	const higherBandTotal =
+		data.confusion_matrix[1]?.reduce((sum, value) => sum + value, 0) ?? 0;
+	const higherBandShare =
+		totalSamples > 0 ? (higherBandTotal / totalSamples) * 100 : 0;
+	const taskTypeLabel =
+		data.task_type?.replace(/_/g, " ") ?? "classification";
 
 	const metrics = [
 		{
 			icon: "check_circle",
 			label: "Model Accuracy",
-			value: data.metrics.accuracy,
-			color: "blue",
+			value: `${(data.metrics.accuracy * 100).toFixed(1)}%`,
+			caption: `${correctPredictions} correct predictions from ${totalSamples} test rows`,
+			progress: data.metrics.accuracy * 100,
+			iconClass: "text-blue-600",
+			barClass: "bg-blue-600",
 		},
 		{
-			icon: "precision_manufacturing",
-			label: "Precision Score",
-			value: data.metrics.precision,
-			color: "indigo",
+			icon: "verified",
+			label: "Correct Predictions",
+			value: `${correctPredictions}`,
+			caption: `Diagonal total in the confusion matrix`,
+			progress:
+				totalSamples > 0
+					? (correctPredictions / totalSamples) * 100
+					: 0,
+			iconClass: "text-emerald-600",
+			barClass: "bg-emerald-600",
 		},
 		{
-			icon: "functions",
-			label: "F1 Score",
-			value: data.metrics.f1_score,
-			color: "purple",
+			icon: "database",
+			label: "Test Samples",
+			value: `${totalSamples}`,
+			caption: `Held-out rows used for evaluation`,
+			iconClass: "text-indigo-600",
 		},
 		{
-			icon: "replay",
-			label: "Recall",
-			value: data.metrics.recall,
-			color: "violet",
+			icon: "stacked_bar_chart",
+			label: `${higherBandLabel} Share`,
+			value: `${higherBandShare.toFixed(1)}%`,
+			caption: `${higherBandTotal} actual rows in the higher band`,
+			progress: higherBandShare,
+			iconClass: "text-amber-600",
+			barClass: "bg-amber-600",
 		},
 	];
 
@@ -198,7 +241,8 @@ function EvaluationPage() {
 							Model Evaluation Results
 						</h1>
 						<p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
-							{data.model_name} — {data.dataset_source}
+							{data.model_name} — {taskTypeLabel} on{" "}
+							{data.dataset_source}
 						</p>
 					</div>
 				</div>
@@ -244,7 +288,7 @@ function EvaluationPage() {
 				<div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm rise-in">
 					<div className="border-b border-slate-100 p-4 dark:border-slate-800 sm:p-5">
 						<h3 className="font-bold text-slate-900 dark:text-white text-lg m-0">
-							Per-Class Performance
+							Per-Band Performance
 						</h3>
 					</div>
 					<div className="overflow-x-auto">

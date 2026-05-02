@@ -52,5 +52,12 @@ export const predictionDto = z.object({
 	time: z.enum(["ONE", "TWO", "THREE", "FOUR", "FIVE", "SEVEN", "SIX"]),
 });
 
+export const predictionResultDto = z.object({
+	result: z.union([z.literal(0), z.literal(1)]),
+	label: z.enum(["Good/Average", "Excellent/Vg"]),
+	confidence: z.number().min(0).max(100),
+});
+
 // 1. Export the Type for use in your Controller
 export type predictionDto = z.infer<typeof predictionDto>;
+export type PredictionResultDto = z.infer<typeof predictionResultDto>;

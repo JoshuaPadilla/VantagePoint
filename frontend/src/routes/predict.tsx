@@ -44,6 +44,66 @@ const occupations = [
 	"OTHERS",
 ];
 
+const casteOptions = [
+	{ value: "General", label: "Open / General Category" },
+	{ value: "OBC", label: "Community Support Category (OBC)" },
+	{ value: "SC", label: "Marginalized Group Category (SC)" },
+	{ value: "ST", label: "Indigenous Group Category (ST)" },
+];
+
+const classTenOptions = [
+	{ value: "SEBA", label: "Public / Regional Board (SEBA)" },
+	{ value: "CBSE", label: "National / Private Board (CBSE)" },
+	{ value: "OTHERS", label: "Other Junior High Board" },
+];
+
+const classTwelveOptions = [
+	{ value: "AHSEC", label: "Regional Senior High Board (AHSEC)" },
+	{ value: "CBSE", label: "National / Private Board (CBSE)" },
+	{ value: "OTHERS", label: "Other Senior High Board" },
+];
+
+const mediumOptions = [
+	{ value: "ENGLISH", label: "English Medium" },
+	{ value: "ASSAMESE", label: "Regional Language Medium" },
+	{ value: "OTHERS", label: "Other Language Medium" },
+];
+
+const gradeOptions = [
+	{ value: "Excellent", label: "Outstanding (Excellent, >= 80%)" },
+	{ value: "Vg", label: "Very Satisfactory (Vg, 60-79%)" },
+	{ value: "Good", label: "Satisfactory (Good, 45-59%)" },
+	{ value: "Average", label: "Needs Support (Average, < 45%)" },
+];
+
+const occupationLabels: Record<string, string> = {
+	CULTIVATOR: "Farmer / Cultivator",
+	SCHOOL_TEACHER: "Basic Education Teacher",
+	COLLEGE_TEACHER: "College Instructor",
+	BUSINESS: "Business Owner",
+	DOCTOR: "Doctor",
+	ENGINEER: "Engineer",
+	BANK_OFFICIAL: "Bank Officer",
+	OTHERS: "Other Occupation",
+	HOUSE_WIFE: "Homemaker",
+};
+
+const coachingOptions = [
+	{ value: "NO", label: "No Review Program" },
+	{ value: "WA", label: "Weekly Review Sessions" },
+	{ value: "OA", label: "Occasional Review Sessions" },
+];
+
+const studyTimeOptions = [
+	{ value: "ONE", label: "About 1 hour" },
+	{ value: "TWO", label: "About 2 hours" },
+	{ value: "THREE", label: "About 3 hours" },
+	{ value: "FOUR", label: "About 4 hours" },
+	{ value: "FIVE", label: "About 5 hours" },
+	{ value: "SIX", label: "About 6 hours" },
+	{ value: "SEVEN", label: "About 7 hours or more" },
+];
+
 function SelectField({
 	id,
 	label,
@@ -194,15 +254,17 @@ function PredictPage() {
 							psychology
 						</span>
 						<span className="text-primary text-xs font-bold uppercase tracking-wider">
-							Random Forest Classifier
+							Binary Random Forest + SMOTE
 						</span>
 					</div>
 					<h1 className="mb-2 mt-0 text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl md:text-4xl">
-						Student Performance Prediction
+						Student Performance Band Prediction
 					</h1>
 					<p className="text-slate-500 dark:text-slate-400 text-sm md:text-base">
-						Enter the student details below to generate a
-						performance forecast based on historical academic data.
+						Enter the student details below to estimate whether the
+						student falls into the higher-performance band
+						(Excellent/Vg) or the support-needed band
+						(Good/Average).
 					</p>
 				</div>
 
@@ -251,15 +313,7 @@ function PredictPage() {
 										icon="group"
 										value={form.Caste}
 										onChange={set("Caste")}
-										options={[
-											{
-												value: "General",
-												label: "General",
-											},
-											{ value: "OBC", label: "OBC" },
-											{ value: "SC", label: "SC" },
-											{ value: "ST", label: "ST" },
-										]}
+										options={casteOptions}
 									/>
 								</div>
 							</div>
@@ -278,14 +332,7 @@ function PredictPage() {
 										icon="library_books"
 										value={form.Class_ten_education}
 										onChange={set("Class_ten_education")}
-										options={[
-											{ value: "SEBA", label: "SEBA" },
-											{ value: "CBSE", label: "CBSE" },
-											{
-												value: "OTHERS",
-												label: "Others",
-											},
-										]}
+										options={classTenOptions}
 									/>
 									<SelectField
 										id="twelve_education"
@@ -294,14 +341,7 @@ function PredictPage() {
 										icon="library_books"
 										value={form.twelve_education}
 										onChange={set("twelve_education")}
-										options={[
-											{ value: "AHSEC", label: "AHSEC" },
-											{ value: "CBSE", label: "CBSE" },
-											{
-												value: "OTHERS",
-												label: "Others",
-											},
-										]}
+										options={classTwelveOptions}
 									/>
 									<SelectField
 										id="medium"
@@ -310,20 +350,7 @@ function PredictPage() {
 										icon="translate"
 										value={form.medium}
 										onChange={set("medium")}
-										options={[
-											{
-												value: "ENGLISH",
-												label: "English",
-											},
-											{
-												value: "ASSAMESE",
-												label: "Assamese",
-											},
-											{
-												value: "OTHERS",
-												label: "Others",
-											},
-										]}
+										options={mediumOptions}
 									/>
 									<SelectField
 										id="Class_X_Percentage"
@@ -332,24 +359,7 @@ function PredictPage() {
 										icon="grade"
 										value={form.Class_X_Percentage}
 										onChange={set("Class_X_Percentage")}
-										options={[
-											{
-												value: "Excellent",
-												label: "Excellent (≥ 80%)",
-											},
-											{
-												value: "Vg",
-												label: "Very Good (60–79%)",
-											},
-											{
-												value: "Good",
-												label: "Good (45–59%)",
-											},
-											{
-												value: "Average",
-												label: "Average (< 45%)",
-											},
-										]}
+										options={gradeOptions}
 									/>
 									<SelectField
 										id="Class_XII_Percentage"
@@ -358,24 +368,7 @@ function PredictPage() {
 										icon="grade"
 										value={form.Class_XII_Percentage}
 										onChange={set("Class_XII_Percentage")}
-										options={[
-											{
-												value: "Excellent",
-												label: "Excellent (≥ 80%)",
-											},
-											{
-												value: "Vg",
-												label: "Very Good (60–79%)",
-											},
-											{
-												value: "Good",
-												label: "Good (45–59%)",
-											},
-											{
-												value: "Average",
-												label: "Average (< 45%)",
-											},
-										]}
+										options={gradeOptions}
 									/>
 								</div>
 							</div>
@@ -396,11 +389,7 @@ function PredictPage() {
 										onChange={set("Father_occupation")}
 										options={occupations.map((o) => ({
 											value: o,
-											label: o
-												.replace(/_/g, " ")
-												.replace(/\b\w/g, (c) =>
-													c.toUpperCase(),
-												),
+											label: occupationLabels[o] ?? o,
 										}))}
 									/>
 									<SelectField
@@ -415,11 +404,7 @@ function PredictPage() {
 											"HOUSE_WIFE",
 										].map((o) => ({
 											value: o,
-											label: o
-												.replace(/_/g, " ")
-												.replace(/\b\w/g, (c) =>
-													c.toUpperCase(),
-												),
+											label: occupationLabels[o] ?? o,
 										}))}
 									/>
 								</div>
@@ -439,17 +424,7 @@ function PredictPage() {
 										icon="hub"
 										value={form.coaching}
 										onChange={set("coaching")}
-										options={[
-											{ value: "NO", label: "None" },
-											{
-												value: "WA",
-												label: "Weekly Attendance",
-											},
-											{
-												value: "OA",
-												label: "Occasional Attendance",
-											},
-										]}
+										options={coachingOptions}
 									/>
 									<SelectField
 										id="time"
@@ -458,21 +433,7 @@ function PredictPage() {
 										icon="schedule"
 										value={form.time}
 										onChange={set("time")}
-										options={[
-											{ value: "ONE", label: "1 hour" },
-											{ value: "TWO", label: "2 hours" },
-											{
-												value: "THREE",
-												label: "3 hours",
-											},
-											{ value: "FOUR", label: "4 hours" },
-											{ value: "FIVE", label: "5 hours" },
-											{ value: "SIX", label: "6 hours" },
-											{
-												value: "SEVEN",
-												label: "7+ hours",
-											},
-										]}
+										options={studyTimeOptions}
 									/>
 								</div>
 							</div>
@@ -506,7 +467,7 @@ function PredictPage() {
 									) : (
 										<>
 											<span className="text-base font-bold">
-												Calculate Prediction
+												Predict Performance Band
 											</span>
 											<span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">
 												arrow_forward
@@ -524,10 +485,11 @@ function PredictPage() {
 							info
 						</span>
 						<p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed m-0">
-							Predictions are estimates based on the Random Forest
-							Classification model. Results should be used as
-							guidance for academic counseling and not as absolute
-							determinants of student potential.
+							Predictions are estimates from the binary Random
+							Forest model. Each result groups the original target
+							classes into either Excellent/Vg or Good/Average and
+							should be used as academic guidance rather than a
+							final judgment.
 						</p>
 					</div>
 				</div>

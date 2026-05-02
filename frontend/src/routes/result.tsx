@@ -2,9 +2,12 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { z } from "zod";
 
+const predictionBandSchema = z.enum(["Good/Average", "Excellent/Vg"]);
+type PredictionBand = z.infer<typeof predictionBandSchema>;
+
 const searchSchema = z.object({
-	result: z.number().int().min(0).max(3),
-	label: z.string(),
+	result: z.union([z.literal(0), z.literal(1)]),
+	label: predictionBandSchema,
 	confidence: z.number(),
 });
 
@@ -14,44 +17,33 @@ export const Route = createFileRoute("/result")({
 });
 
 const labelConfig: Record<
-	string,
+	PredictionBand,
 	{ bg: string; text: string; icon: string; iconColor: string; desc: string }
 > = {
-	Excellent: {
+	"Excellent/Vg": {
 		bg: "bg-green-100 dark:bg-green-900/30",
 		text: "text-green-700 dark:text-green-400",
 		icon: "emoji_events",
 		iconColor: "text-green-600 dark:text-green-400",
-		desc: "Outstanding academic performance predicted.",
+		desc: "Higher-performance band predicted. This grouped class combines Excellent and Very Good outcomes.",
 	},
-	Vg: {
-		bg: "bg-blue-100 dark:bg-blue-900/30",
-		text: "text-blue-700 dark:text-blue-400",
-		icon: "thumb_up",
-		iconColor: "text-blue-600 dark:text-blue-400",
-		desc: "Very good academic performance expected.",
-	},
-	Good: {
+	"Good/Average": {
 		bg: "bg-amber-100 dark:bg-amber-900/30",
 		text: "text-amber-700 dark:text-amber-400",
-		icon: "check_circle",
+		icon: "flag",
 		iconColor: "text-amber-600 dark:text-amber-400",
-		desc: "Good performance; some areas need focus.",
-	},
-	Average: {
-		bg: "bg-orange-100 dark:bg-orange-900/30",
-		text: "text-orange-700 dark:text-orange-400",
-		icon: "warning",
-		iconColor: "text-orange-600 dark:text-orange-400",
-		desc: "Average performance; additional support recommended.",
+		desc: "Support-needed band predicted. This grouped class combines Good and Average outcomes.",
 	},
 };
 
-const labelDisplayName: Record<string, string> = {
-	Excellent: "Excellent",
-	Vg: "Very Good",
-	Good: "Good",
-	Average: "Average",
+const labelDisplayName: Record<PredictionBand, string> = {
+	"Excellent/Vg": "Excellent / Very Good",
+	"Good/Average": "Good / Average",
+};
+
+const resultToLabel: Record<0 | 1, PredictionBand> = {
+	0: "Good/Average",
+	1: "Excellent/Vg",
 };
 
 function GaugeCircle({ confidence }: { confidence: number }) {
@@ -116,7 +108,7 @@ function GaugeCircle({ confidence }: { confidence: number }) {
 
 function ResultPage() {
 	const navigate = useNavigate();
-	const { result, label, confidence } = Route.useSearch();
+	const { result, confidence } = Route.useSearch();
 
 	// Read form inputs back from sessionStorage
 	const storedForm = (() => {
@@ -128,30 +120,23 @@ function ResultPage() {
 		}
 	})();
 
-	const config = labelConfig[label] ?? labelConfig["Average"];
-	const displayName = labelDisplayName[label] ?? label;
+	const normalizedLabel = resultToLabel[result];
+	const config = labelConfig[normalizedLabel];
+	const displayName = labelDisplayName[normalizedLabel];
 
 	// Recommendations based on label
-	const recommendations: Record<string, string[]> = {
-		Excellent: [
-			"Continue current study habits and dedication.",
-			"Consider mentoring peers to reinforce your own understanding.",
+	const recommendations: Record<PredictionBand, string[]> = {
+		"Excellent/Vg": [
+			"Maintain the current study rhythm and use mock tests to sharpen exam execution.",
+			"Focus on consistency and revision quality rather than broad remediation.",
 		],
-		Vg: [
-			"Maintain consistency in study schedule.",
-			"Focus on any weak subjects identified in Class XII.",
-		],
-		Good: [
-			"Increase weekly study hours and seek coaching support.",
-			"Review Class XII topics systematically before assessments.",
-		],
-		Average: [
-			"Enroll in structured coaching sessions for key subjects.",
-			"Set dedicated daily study goals and track progress weekly.",
+		"Good/Average": [
+			"Prioritize structured coaching and a fixed weekly study schedule.",
+			"Rebuild core Class X and Class XII topics before moving to harder material.",
 		],
 	};
 
-	const tips = recommendations[label] ?? recommendations["Average"];
+	const tips = recommendations[normalizedLabel];
 
 	return (
 		<main className="flex-1 px-4 py-6 sm:py-10 rise-in">
@@ -178,7 +163,7 @@ function ResultPage() {
 					<div className="lg:col-span-2 flex flex-col gap-6">
 						{/* Primary outcome card */}
 						<div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-							<div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary to-blue-400" />
+							<div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-primary to-blue-400" />
 							<div className="mb-6 flex flex-col items-start justify-between gap-4 sm:mb-8 sm:flex-row sm:items-center sm:gap-6">
 								<div>
 									<h3 className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider mb-2">
@@ -205,7 +190,7 @@ function ResultPage() {
 										psychology
 									</span>
 									<span className="text-primary font-medium text-sm">
-										Random Forest Model
+										Binary Random Forest Model
 									</span>
 								</div>
 							</div>
@@ -222,13 +207,16 @@ function ResultPage() {
 										</h4>
 										<p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">
 											Based on the provided student
-											parameters, the Random Forest
-											classifier predicts a performance
-											category of{" "}
+											parameters, the binary Random Forest
+											classifier predicts that the student
+											falls in the{" "}
 											<strong>{displayName}</strong> with{" "}
 											{confidence.toFixed(1)}% model
-											confidence (class {result} on a 0–3
-											scale).
+											confidence (class {result} on a 0–1
+											scale). The two output bands
+											collapse the original four
+											categories into a simpler screening
+											decision.
 										</p>
 									</div>
 									{/* Confidence band */}
@@ -365,7 +353,7 @@ function ResultPage() {
 													<span className="min-w-0 text-slate-600 dark:text-slate-400 capitalize">
 														{f.replace(/_/g, " ")}
 													</span>
-													<span className="ml-2 text-right font-semibold text-slate-900 dark:text-white break-words">
+													<span className="ml-2 text-right font-semibold text-slate-900 dark:text-white wrap-break-word">
 														{storedForm[f] || "—"}
 													</span>
 												</div>
