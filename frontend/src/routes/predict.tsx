@@ -45,28 +45,31 @@ const occupations = [
 ];
 
 const casteOptions = [
-	{ value: "General", label: "Open / General Category" },
-	{ value: "OBC", label: "Community Support Category (OBC)" },
-	{ value: "SC", label: "Marginalized Group Category (SC)" },
-	{ value: "ST", label: "Indigenous Group Category (ST)" },
+	{ value: "General", label: "Rich" },
+	{ value: "OBC", label: "Upper Middle / Middle Middle" },
+	{ value: "SC", label: "Lower Middle / Low Income" },
+	{ value: "ST", label: "Poor" },
 ];
 
 const classTenOptions = [
-	{ value: "SEBA", label: "Public / Regional Board (SEBA)" },
-	{ value: "CBSE", label: "National / Private Board (CBSE)" },
-	{ value: "OTHERS", label: "Other Junior High Board" },
+	{ value: "SEBA", label: "Public" },
+	{ value: "CBSE", label: "Private" },
+	{ value: "OTHERS", label: "Other" },
 ];
 
 const classTwelveOptions = [
-	{ value: "AHSEC", label: "Regional Senior High Board (AHSEC)" },
-	{ value: "CBSE", label: "National / Private Board (CBSE)" },
-	{ value: "OTHERS", label: "Other Senior High Board" },
+	{ value: "AHSEC", label: "Academic Track (STEM, ABM, HUMMS)" },
+	{
+		value: "CBSE",
+		label: "Technical-Professional (ICT, Industrial Technologies, Agri-Fishery)",
+	},
+	{ value: "OTHERS", label: "Other" },
 ];
 
 const mediumOptions = [
-	{ value: "ENGLISH", label: "English Medium" },
-	{ value: "ASSAMESE", label: "Regional Language Medium" },
-	{ value: "OTHERS", label: "Other Language Medium" },
+	{ value: "ENGLISH", label: "English" },
+	{ value: "ASSAMESE", label: "Tagalog" },
+	{ value: "OTHERS", label: "Other" },
 ];
 
 const gradeOptions = [
@@ -308,7 +311,7 @@ function PredictPage() {
 									/>
 									<SelectField
 										id="Caste"
-										label="Caste / Category"
+										label="Socio-Economic Background"
 										hint="Mapped to socioeconomic background category — a proxy for educational access level and social classification."
 										icon="group"
 										value={form.Caste}
@@ -327,7 +330,7 @@ function PredictPage() {
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 									<SelectField
 										id="Class_ten_education"
-										label="Class X Education Board"
+										label="Junior High School Type"
 										hint="Mapped to Junior High School institution type (e.g. public, private, science high school)."
 										icon="library_books"
 										value={form.Class_ten_education}
@@ -336,7 +339,7 @@ function PredictPage() {
 									/>
 									<SelectField
 										id="twelve_education"
-										label="Class XII Education Board"
+										label="Senior High School Type"
 										hint="Mapped to Senior High School academic track or institution type (e.g. STEM, ABM, HUMSS, TVL, GAS)."
 										icon="library_books"
 										value={form.twelve_education}
@@ -345,7 +348,7 @@ function PredictPage() {
 									/>
 									<SelectField
 										id="medium"
-										label="Medium of Instruction"
+										label="Primary Language of Instruction"
 										hint="Primary language used during previous schooling. May influence comprehension in the entrance exam."
 										icon="translate"
 										value={form.medium}
@@ -354,7 +357,7 @@ function PredictPage() {
 									/>
 									<SelectField
 										id="Class_X_Percentage"
-										label="Class X Percentage Grade"
+										label="Grade 10 General Average (GA)"
 										hint="Mapped to Junior High School general average."
 										icon="grade"
 										value={form.Class_X_Percentage}
@@ -363,8 +366,8 @@ function PredictPage() {
 									/>
 									<SelectField
 										id="Class_XII_Percentage"
-										label="Class XII Percentage Grade"
-										hint="Mapped to Senior High School general average."
+										label="Grade 12 General Weighted Average (GWA)"
+										hint="Mapped to Senior High School general weighted average."
 										icon="grade"
 										value={form.Class_XII_Percentage}
 										onChange={set("Class_XII_Percentage")}
