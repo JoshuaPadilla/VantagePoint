@@ -45,10 +45,10 @@ const occupations = [
 ];
 
 const casteOptions = [
-	{ value: "General", label: "Rich" },
-	{ value: "OBC", label: "Upper Middle / Middle Middle" },
-	{ value: "SC", label: "Lower Middle / Low Income" },
-	{ value: "ST", label: "Poor" },
+	{ value: "General", label: "Upper" },
+	{ value: "OBC", label: "Middle Class" },
+	{ value: "SC", label: "Lower Class" },
+	{ value: "ST", label: "Other" },
 ];
 
 const classTenOptions = [
@@ -330,8 +330,8 @@ function PredictPage() {
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 									<SelectField
 										id="Class_ten_education"
-										label="Junior High School Type"
-										hint="Mapped to Junior High School institution type (e.g. public, private, science high school)."
+										label="Junior High School"
+										hint="Mapped to Junior High School institution (e.g. public, private, science high school)."
 										icon="library_books"
 										value={form.Class_ten_education}
 										onChange={set("Class_ten_education")}
@@ -339,8 +339,8 @@ function PredictPage() {
 									/>
 									<SelectField
 										id="twelve_education"
-										label="Senior High School Type"
-										hint="Mapped to Senior High School academic track or institution type (e.g. STEM, ABM, HUMSS, TVL, GAS)."
+										label="Senior High School"
+										hint="Mapped to Senior High School academic track or institution (e.g. STEM, ABM, HUMSS, TVL, GAS)."
 										icon="library_books"
 										value={form.twelve_education}
 										onChange={set("twelve_education")}
