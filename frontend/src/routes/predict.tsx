@@ -45,7 +45,7 @@ const occupations = [
 ];
 
 const casteOptions = [
-	{ value: "General", label: "Upper" },
+	{ value: "General", label: "Upper Class" },
 	{ value: "OBC", label: "Middle Class" },
 	{ value: "SC", label: "Lower Class" },
 	{ value: "ST", label: "Other" },
