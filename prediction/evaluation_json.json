@@ -9,7 +9,16 @@
         "Average": 0
     },
     "metrics": {
-        "accuracy": 0.7463
+        "accuracy": 0.7463,
+        "precision_macro": 0.7619,
+        "recall_macro": 0.7577,
+        "f1_macro": 0.746,
+        "precision_higher_performance_band": 0.6667,
+        "recall_higher_performance_band": 0.8667,
+        "f1_higher_performance_band": 0.7536,
+        "precision_support_needed_band": 0.8571,
+        "recall_support_needed_band": 0.6486,
+        "f1_support_needed_band": 0.7385
     },
     "confusion_matrix": [
         [
